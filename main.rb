@@ -12,6 +12,7 @@ end
 
 def break_code_user(coder)
   loop do
+    print 'Take a guess: '
     guess = gets.chomp.downcase
     hints = coder.check_code(guess)
     if coder.win?
@@ -29,7 +30,9 @@ end
 def break_code_computer(coder)
   computer = Computer.new
   loop do
-    hints = coder.check_code(computer.guess)
+    guess = computer.guess
+    puts "Computer's guess: #{guess}"
+    hints = coder.check_code(guess)
     if coder.win?
       puts 'Computer Won'
       break
@@ -50,17 +53,25 @@ def get_guess
   end
 end
 
-puts code = generate_code
-coder = Coder.new(code)
+
 answer = 'y'
 while answer == 'y'
+  print "Pick the role you want to play:\n" + 
+       "1.- Code Breaker\n" +
+       "2.- Code Maker\n" + 
+       'Option: ' 
   type_of_game = gets.chomp
   if type_of_game == '1'
+    code = generate_code
+    coder = Coder.new(code)
     break_code_user(coder)
   else
+    print 'Write the code to break: '
+    code = gets.chomp
+    coder = Coder.new(code)
     break_code_computer(coder)
   end
-  print "Wanna play again? (y/n): "
+  print "Do you want to play again? (y/n): "
   answer = gets.chomp.downcase
   coder.reset(generate_code) if answer == 'y'
 end

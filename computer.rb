@@ -24,7 +24,6 @@ class Computer
     else
       @guess = @options[0]
     end
-    puts @guess
     @guess
   end
 
