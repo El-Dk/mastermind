@@ -10,7 +10,7 @@ def generate_code
   code
 end
 
-def break_code(coder)
+def break_code_user(coder)
   loop do
     guess = gets.chomp.downcase
     hints = coder.check_code(guess)
@@ -26,6 +26,23 @@ def break_code(coder)
   end  
 end
 
+def break_code_computer(coder)
+  computer = Computer.new
+  loop do
+    hints = coder.check_code(computer.guess)
+    if coder.win?
+      puts 'Computer Won'
+      break
+    elsif coder.guesses >= 12
+      puts 'Computer Lost'
+      break
+    else
+      coder.show_hints
+      computer.remove_options(hints)
+    end
+  end  
+end
+
 def get_guess
   guess = gets.chomp
   if guess.length != 4
@@ -33,12 +50,16 @@ def get_guess
   end
 end
 
-code = generate_code
+puts code = generate_code
 coder = Coder.new(code)
 answer = 'y'
-
 while answer == 'y'
-  break_code(coder)
+  type_of_game = gets.chomp
+  if type_of_game == '1'
+    break_code_user(coder)
+  else
+    break_code_computer(coder)
+  end
   print "Wanna play again? (y/n): "
   answer = gets.chomp.downcase
   coder.reset(generate_code) if answer == 'y'

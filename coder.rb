@@ -13,7 +13,7 @@ class Coder
   end
 
   def reset(code)
-    @code = code
+    puts @code = code
     @guesses = 0
   end
 
