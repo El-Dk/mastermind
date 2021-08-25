@@ -5,14 +5,23 @@ require './display'
 # Coder class definition
 class Coder
   include Display
-  attr_reader :guesses
+  attr_reader :guesses, :code
 
   def initialize(code)
     @code = code
     @guesses = 0
+    @colors = {
+      '1' => "\e[101m \e[30m1 \e[0m",
+      '2' => "\e[102m \e[30m2 \e[0m",
+      '3' => "\e[103m \e[30m3 \e[0m",
+      '4' => "\e[104m \e[30m4 \e[0m",
+      '5' => "\e[105m \e[30m5 \e[0m",
+      '6' => "\e[106m \e[30m6 \e[0m"
+    }
   end
 
   def reset(code)
+    @code = code
     @guesses = 0
   end
 
