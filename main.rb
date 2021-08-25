@@ -6,7 +6,7 @@ require './computer'
 
 def generate_code
   code = ''
-  4.times { code << (rand(6) + 1).to_s }
+  4.times { code << rand(1..6).to_s }
   code
 end
 
@@ -15,28 +15,35 @@ def break_code_user(coder)
     print "\nColors:\t"
     coder.show_colors
     print 'Take a guess: '
-    guess = get_guess
+    guess = validate_guess
+    puts "\n"
+    puts "\tGuess ##{coder.guesses + 1}:\t\t\tHints:\n\n"
+    print "\t"
     coder.show_guess(guess)
-    hints = coder.check_code(guess)
+    coder.check_code(guess)
     if coder.win?
       puts "\n\n\t\t\t-------"
       puts "\t\t\tYOU WON"
       puts "\t\t\t-------\n\n"
       break
     elsif coder.guesses >= 12
-      puts "\n\n\t\tYou Lost, the code was #{coder.code}\n\n"
+      print "\n\n\t\tYou Lost, the code was: " # {coder.code}\n\n"
+      coder.show_guess(coder.code)
+      puts "\n\n"
       break
     else
       coder.show_hints
     end
-  end  
+  end
 end
 
 def break_code_computer(coder)
   computer = Computer.new
   loop do
     guess = computer.guess
-    puts "Computer's guess: "
+    puts "\n"
+    puts "\tGuess ##{coder.guesses + 1}:\t\t\tHints:\n\n"
+    print "\t"
     coder.show_guess(guess)
     hints = coder.check_code(guess)
     if coder.win?
@@ -51,12 +58,12 @@ def break_code_computer(coder)
       coder.show_hints
       computer.remove_options(hints)
     end
-  end  
+  end
 end
 
-def get_guess
+def validate_guess
   guess = gets.chomp.strip
-  until guess.length == 4 && guess.to_i.to_s == guess  && !check_digits(guess)
+  until guess.length == 4 && guess.to_i.to_s == guess && !check_digits(guess)
     puts 'Invalid input. Only use numbers from 1 to 6.'
     print 'Please pick four colors: '
     guess = gets.chomp.strip
@@ -72,28 +79,28 @@ coder = Coder.new('1111')
 answer = 'y'
 coder.show_instructions
 while answer == 'y'
-  print "\nPick the role you want to play:\n\n" + 
-       "1.- Code Breaker\n" +
-       "2.- Code Maker\n\n" + 
-       'Role: ' 
+  print "\nPick the role you want to play:\n\n" \
+        "1.- Code Breaker\n" \
+        "2.- Code Maker\n\n" \
+        'Role: '
   type_of_game = gets.chomp.strip
-  until type_of_game == '1' || type_of_game == '2'
+  until %w[1 2].include?(type_of_game)
     print 'Please choose 1 or 2: '
     type_of_game = gets.chomp.strip
   end
   if type_of_game == '1'
-    puts code = generate_code
+    code = generate_code
     coder.reset(code)
     break_code_user(coder)
   else
     print "\nWrite the code to break: "
-    code = get_guess
+    code = validate_guess
     coder.reset(code)
     break_code_computer(coder)
   end
-  print "Do you want to play again? (y/n): "
+  print 'Do you want to play again? (y/n): '
   answer = gets.chomp.downcase.strip
-  until answer == 'y' || answer == 'n'
+  until %w[y n].include?(answer)
     print "Please choose 'y' or 'n': "
     answer = gets.chomp.downcase.strip
   end

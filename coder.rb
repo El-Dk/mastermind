@@ -52,7 +52,7 @@ class Coder
 
   def win?
     num_rights = 0
-    (0..3).each { |hint| num_rights += 1 if @hints[hint] == 'right'}
+    (0..3).each { |hint| num_rights += 1 if @hints[hint] == 'right' }
     num_rights == 4
   end
 end

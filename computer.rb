@@ -2,6 +2,7 @@
 
 require './coder'
 
+# Computer class definition
 class Computer
   def initialize
     @options = []
@@ -16,7 +17,7 @@ class Computer
       end
     end
   end
-  
+
   def guess
     if @first_guess
       @first_guess = false
@@ -29,10 +30,9 @@ class Computer
 
   def get_pins(hints)
     pins = Array.new(2, 0)
-    hints.reduce(pins) do |pins, hint|
+    hints.each_with_object(pins) do |hint, pins|
       pins[0] += 1 if hint == 'right'
       pins[1] += 1 if hint == 'almost'
-      pins
     end
     pins
   end
